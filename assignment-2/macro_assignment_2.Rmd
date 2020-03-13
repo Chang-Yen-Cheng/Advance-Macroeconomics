@@ -1,0 +1,24 @@
+---
+title: 'Macroeconomics'
+subtitle: 'Assignment 2'
+author: "Chang Yen Cheng"
+date: '`r format(Sys.time(), "%d %b, %Y")`'
+output: pdf_document
+fontsize: 12pt
+classoption: a4paper
+urlcolor: blue
+---
+
+## Question 1 (Essay of length 1-2 pages)
+
+Compare and contrast the approaches of the New Classical and New Keynesian schools of thought to the modelling of macroeconomic fluctuations.
+
+Write your answer below.
+
+
+Economists developed the Dynamic Stochastic General Equilibrium(DSGE) model to describe the whole economy. DSGE model has the merit of logic consistency because it is built on microeconomics’s preferences and decision making concepts by modeling the behaviorsofarepresentativeagent. TheNewClassicalschool’smodelingofmacroeconomic ﬂuctuations is explained by Real Business Cycle(RBC) theory on top of SDGE model framework. It is based on assumptions such as rational expectation, markets are perfect competitionandmarketclearingcondition(WalrusLaw)willmeet, sowhenbothconsumer agent and ﬁrm agent maximize their utility, the economy acheives pareto eﬃciency and equilibrium. And by RBC theory, a shock is seen as a exogenous stochastic component, when a shock aﬀects the economy the market becomes disequilibrium in a very short time, then the interest rate in the bond market, price in the good market, and wage in the labor market will instantaneously adjust themselves until all markets clear which is when all markets achieved the new equilibrium. This also shows the two main features of the RBC model : instantaneous price adjustment and monetary neutrality (money policy is irrelevent for economic ﬂuctuations). The New Kaynesians School also bases on the framework of DSGE model but instead assume “sticky price”: price and wage cannot be instantaneous adjusted, which is tend to be more of a real world observation, due to the “sticky price”, markets don’t have to be equilibrium all the time, and this also creates non-neutrality in money (monetary policy works). The both schools aim at diﬀerent perspectives of the economy. When a shock comes, the Classical school care about in long run, when the room to arbitrage is extinguished, how the economy will be like. Whereas as Kaynes quoted:“In the long run, we are all dead.”,the Kaynesian school cares more about how the economy is aﬀected in the short run. This also created the main debate upon monetary policy, the Classical school doesn’t want the government to intervene the market because it will create distortion which makes everyone worse oﬀ. They believe that even in the darkest time, the economy will eventually be ﬁne due to the business cycle. The policy government imposed will only lead the economy to an even worse situation. The Kaynesian school believes that since the market isn’t perfect, there are actually a lot of room for government to aﬀect the economy and make the world better. Sim used the VAR model as an attempt to solve the contradiction of the views toward monetary policy between the two schools, and found out that both schools aren’t actually correct. The eﬀect on interest rate innovation shock acts diﬀerently as both school expected.
+
+
+
+
+
