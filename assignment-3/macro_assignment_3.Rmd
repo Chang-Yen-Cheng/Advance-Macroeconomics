@@ -1,0 +1,86 @@
+---
+title: 'Macroeconomics'
+subtitle: 'Assignment 3'
+author: "Chang Yen Cheng"
+date: '`r format(Sys.time(), "%d %b, %Y")`'
+output: pdf_document
+fontsize: 12pt
+classoption: a4paper
+urlcolor: blue
+---
+
+## Question 1
+Summarise the key points of Sims' discussion of the existing evidence (section 2 of his article) on the effects of monetary policy on macroeconomic variables. Identify Keynesian, Monetarist and RBC differences. Write about two pages.
+
+<!-- Answer here -->
+1.Keynesian IS-LM framework in 1950s and 60s: Policy can increase the money stock, by shifting the LM curve outward. Assuming the IS curve is downward-sloping and holds still under this policy action, interest rate will drop and output will increase. But they are challenged by modern standards because it provides no explicit discussion of which conditions that individual optimization are being relaxed. The reason they remain influential is because that they are strongly supported by historical evidence: historical event studies using monetary aggregates and the study of impulse responses lead to the same conclusion that when monetary aggregates increase unexpectedly, nominal income subsequently rises. Variation in income predicted by monetary innovations constitutes a large part of total variation in income. The variation in monetary aggregates predicted by income innovations is small. Which is consistent with the view that random disturbances in monetary policy generate a large fraction of the observed business cycle, and it is difficult or impossible to explain with most RBC models in the literature.
+2.Monetarism: The facts that in larger multivariate time series models, including a nominal interest rate, money stock innovations become smaller, as interest rate innovations predict a considerable fraction of movement in the money stock do not fit the most extreme monetarist view, but raised no difficulty for a broader view that monetary policy disturbances are important in generating aggregate fluctuations.
+3.RBC: In an earlier paper [Sims(1986)] has the conclusion that monetary policy disturbances are estimated to have substantial and plausible effects on real output. But this strong empirical support was weakened as time goes by. In [Sims(1989)] demonstrates a particular kind of RBC-style model which features a monetary authority using the interest rate as its instrument, raising it in response to rapid growth in money and having a two-good technology which letting the model includes a small real role for transactions balances in the technology, so monetary policy does have real effects, but they are small and not of the form implied by monetarist or IS-LM theory. Nonetheless it produces a strong Granger causal ordering from money to nominal income, just as in actual data. Furthermore, when interest rate data from the model are included in the reduced form, the interest rate innovations predict declines in money stock and output very much like those observed in reduced forms fit to actual data. The downside is that it does not divide impulse responses of nominal income into real and price components the way impulse responses fit to actual data do, the price responses are stronger and the real responses weaker in the model data than in actual ones. This model shows that, because interest rates and money are closely linked to investment portfolio decisions they tend to react quickly to new information, as other asset market variables do. In other words, the historical pattern of monetary tightness preceding recessions is misleading.
+Generally RBC model in theory is more "complete" comparing to ISLM model, but it doesn't confront the impulse-response facts about interactions of monetary and real variables (Sims's particular model did, but having its own problems). Keynesian ISLM model and monetarist framework, which suggested that monetary policy has real effects is more closer to the data.
+ 
+## Question 2
+Replicate the four-variable VAR model orthogonalised impulse response function charts for figures 7 (for Germany), 8 (for Japan) and 10 (for the U.S.) in Sims(1992). Use the data in the files "Sims_DE.rds" for Germany, "Sims_JP.rds" for Japan and "Sims_US.rds" for the US. Use the same sample period, VAR order and and order of the variables as used by Sims. Note that for the U.S. model, we only have M1 data from January 1959 so start the sample in 1959. Include monthly seasonal dummy variables (season = 12) and both constant and trend terms (type="both") in the VAR models. You do not need bootstrapped confidence intervals for your IRF charts. Please use the new function for plotting the charts called "plotIRFnc1.R" that is included with the files cloned from GitHub for the assignment (remember to "source" the function).
+
+<!-- Answer here -->
+
+```{r}
+library(xts)
+library(vars)
+source('plotIRFnc1.R')
+DE <- readRDS("Sims_DE.rds")
+JP <- readRDS("Sims_JP.rds")
+US <- readRDS("Sims_US.rds")
+DE.ts <- ts(DE["1961/1989"], start = c(1961,4), end = c(1989,12), frequency = 12) 
+JP.ts <- ts(JP["1965/1991"], start = c(1965, 4), end = c(1991, 1), frequency = 12)
+US.ts <- ts(US["1959/1991"], start = c(1959, 1), end = c(1991, 2), frequency = 12)
+DE.xt <- as.xts(DE.ts)
+JP.xt <- as.xts(JP.ts)
+US.xt <- as.xts(US.ts)
+DE.vm <- VAR(DE.xt, p= 14,type = "both", season = 12 )
+JP.vm <- VAR(JP.xt, p= 14,type = "both", season = 12 )
+US.vm <- VAR(US.xt, p= 14,type = "both", season = 12 )
+irf.DE <- irf(DE.vm, ortho = TRUE, cumulative = FALSE , n.ahead = 24 , boot = FALSE)
+irf.JP <- irf(JP.vm, ortho = TRUE, cumulative = FALSE , n.ahead = 24 , boot = FALSE)
+irf.US <- irf(US.vm, ortho = TRUE, cumulative = FALSE , n.ahead = 24 , boot = FALSE)
+plotIRFnc(irf.DE)
+plotIRFnc(irf.JP)
+plotIRFnc(irf.US)
+
+```
+
+
+## Question 3
+Calculate the forecast error variance decomposition for each model you estimated in Question 2. Provide a plot of the FEVD results (you may need to make the plot from the date produced by the fevd function yourself). Interpret the macroeconomic meaning of your results.
+
+<!-- Answer here -->
+
+```{r}
+par(mar=c(0.5,0.5,0.5,0.5))
+plot(fevd(DE.vm, n.ahead = 12))
+plot(fevd(JP.vm, n.ahead = 12))
+plot(fevd(US.vm, n.ahead = 12))
+```
+Germany: The impact of Y to R increases over time getting to about 20% at one year period. The impact from R to M increases tremendously by time and getting to about 40% at one year period, this shows that monetary policy has real effects. The impact from R to P and R to Y both increase by time but the amount isn't significant.
+Japan: The impact of R are mostly done by itself. The impact from R to M increases tremendously by time and getting to about 45% at one year period. The impact from R to P is becoming bigger by time in Japan and getting to 40% in a year. Interestingly, the impact from P to Y increase by time and getting to 40% at one year period. Observing the facts above, Sims asked this question in his essay: If money contraction reduces nominal aggregate income, lowering output through the interaction of deflationary pressure with price stickiness how can it be associated with previously unanticipated inflation rather than deflation ?
+US: The impact from Y to R increases over time getting to about 20% at one year period. The impact from R to M increase tremendously by time and getting to about 40% at one year period. The impact from R to P and R to Y both increase by time but the amount isn't significant.
+Conclusion : All results show that monetary policy have real effects and it strengthens by time, continuing to increase in a year. This can't be explain by any RBC theory, but by IS-LM theory: interest rate surprises represent monetary policy shocks, and monetary contraction generates declining M and Y (Although the IS-LM theory interprets it this way, we can observe that the impact to Y in one year has little to do with R). The result of Germany and US is more similar where the factors influencing the four variables are quite the same. Japan is a special case(as Sims said in his essay) where its Y doesn't contribute to its shocks in R, its impact from R to P and the impact from P to Y are relatively large.
+
+## Question 4
+Estimate the VAR model from Question 2 for Japan over the period 1990 to 2016. Plot the impulse response functions. Compare and contrast the macroeconomic implications of the impulse response functions produced for Sims' sample and the sample for 1990 to 2016. What are the important differences in the IRFs between the two time periods and what are their macroeconomic implications?
+
+<!-- Answer here -->
+
+```{r}
+
+JP1.ts <- ts(JP["1990/2016"], start = c(1990, 1), end = c(2016, 12), frequency = 12)
+JP1.xt <- as.xts(JP1.ts)
+JP1.vm <- VAR(JP1.xt, p= 14,type = "both", season = 12 )
+irf.JP1 <- irf(JP1.vm, ortho = TRUE, cumulative = FALSE , n.ahead = 24 , boot = FALSE)
+plotIRFnc(irf.JP1)
+plotIRFnc(irf.JP)
+
+```
+
+I think the trend doesn't differ much from before. The great difference is the volatility of the graph. By the innovations of technology information spread much faster than before making the system more unstable. With the large currency movement of the financial market, the uncertainty has increased so much that the factors affecting the economy has became much more harder to speculate then before.  
+
+
