@@ -1,0 +1,113 @@
+---
+title: "Macroeconomics"
+author: "Chang Yen Cheng"
+date: "`r format(Sys.time(), "%d %b, %Y")`"
+output:
+html_document:
+df_print: paged
+fontsize: 11pt
+subtitle: Assignment 1
+classoption: a4paper
+urlcolor: blue
+---
+
+## Question: Empirical Modelling Exercise
+
+a) Download United Kingdom (UK) real GDP using the data series CLVMNACSCAB1GQUK from FRED.
+
+b) Plot the log of real GDP. 
+
+c) Extract the trend and cyclical components of log real GDP using the Hodrick-Prescott (HP) filter and Hamilton's method. Plot your results.
+
+d) Graphically compare your cycle results for the UK to those that we generated in the lecture for the United States. 
+
+e) Do your results suggest that the UK business cycle is similar or different to the US business cycle? Please explain the similarities and/or differences. Do these change over time? Do you suspect any particular economic events drive the patterns you observe?
+
+```{r, tidy=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
+# Put the packages you wish to load here.
+library(quantmod)
+library(broom)
+library(magrittr)
+library(ggplot2)
+library(mFilter)
+library(neverhpfilter)
+library(dynlm)
+```
+
+Create code chunks like below to contain the code you wish to execute. The following code downloads UK real GDP data.
+
+```{r, tidy=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
+# Download some US macroeconomic data
+UKGDP <- getSymbols("CLVMNACSCAB1GQUK", src = "FRED", auto.assign = FALSE) 
+```
+
+Calculate log of UK real GDP.
+
+```{r, tidy=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
+UKGDP <- cbind(UKGDP, log(UKGDP[,1]))
+colnames(UKGDP) <- c("ukrgdp", "lukrgdp")
+```
+
+```{r, tidy=FALSE, warning=FALSE, message=FALSE, fig.height=4, fig.width=7}
+# <------ Continue working and your answer to the question here ------>
+```
+
+Write answers to the questions here.
+
+```{r}
+#(b)
+ggplot(UKGDP, aes(x=index(UKGDP),y=lukrgdp)) + geom_line(color="firebrick") + theme_bw() + labs(title = "UK Log Real GDP", x = "quarter", y = "", caption = "Source:Eurostat, Real Gross Domestic Product for United Kingdom [CLVMNACSCAB1GQUK], retrieved from FRED, Federal Reserve Bank of St. Louis")
+```
+
+```{r}
+#(c)
+#plot hpfilter trend and cycle
+hp <- hpfilter(UKGDP$lukrgdp,freq = 100)
+hp_t <- xts(hp$trend, order.by = index(UKGDP))
+UKGDP <- cbind(UKGDP,hp_t)
+colnames(UKGDP)[3] <- "hptrend"
+hp_c <- xts(hp$cycle, order.by = index(UKGDP))
+UKGDP <- cbind(UKGDP,hp_c)
+colnames(UKGDP)[4] <- "hpcyc"
+TMP <- UKGDP[,c(2,3)]
+tidy(TMP) %>% ggplot(aes(x=index,y=value,color=series)) + geom_line() + theme_bw() + labs(title = "UKGDP and HPtrend" , x = "quarter" , y ="")
+TMP <- UKGDP[,4]
+tidy(TMP) %>% ggplot(aes(x=index,y=value)) +geom_line(color="blue") + geom_hline(yintercept=0) + theme_bw() + labs(title = "HPcyclical components" , x = "quarter" , y="")
+#plot hamilton's filter trend and cycle
+ham <- yth_filter(UKGDP$lukrgdp ,h=8, p=4, output = c("trend","cycle")) 
+UKGDP <- cbind(UKGDP,ham)
+colnames(UKGDP)[5:6] <- c("hamtrend","hamcyc")
+TMP <- UKGDP[,c(2,5)]
+tidy(TMP) %>% ggplot(aes(x=index,y=value)) + geom_line(color="darkorchid1")+theme_bw()+labs(title = "UKGDP and Hamtrend",x = "quarter",y ="")
+TMP <- UKGDP[,6]
+tidy(TMP) %>% ggplot(aes(index,y=value)) + geom_line(color="darkorange")+ geom_hline(yintercept=0)+theme_bw()+labs(title = "Hamcyclical components")
+```
+
+```{r}
+#(d)
+#hp filter comparison
+GDP <- getSymbols("A939RX0Q048SBEA", src = "FRED", auto.assign = FALSE) 
+GDP <- cbind(GDP,log(GDP[,1]))
+colnames(GDP)[2] <- "lrgdp"
+hp1 <- hpfilter(GDP$lrgdp, freq = 1600)
+hp_c1 <- xts(hp1$cycle, order.by = index(GDP))
+GDP <- cbind(GDP,hp_c1)
+colnames(GDP)[3] <- "hp1cyc"
+TMP <- cbind(GDP$hp1cyc,UKGDP$hpcyc)
+tidy(TMP) %>% ggplot(aes(x=index,y=value,color=series))+geom_line() + geom_hline(yintercept=0)+theme_bw()+labs(title = "HP filter comparison",x= "quarter", y="")
+#hamilton's filter comparison
+ham1 <- yth_filter(GDP$lrgdp,h=8,p=4,output = c("trend","cycle"))
+GDP <- cbind(GDP,ham1)
+colnames(GDP)[4:5] <- c("ham1trend","hamcyc")
+TMP <- cbind(GDP$hamcyc,UKGDP$hamcyc)
+tidy(TMP) %>% ggplot(aes(x=index,y=value,color=series))+geom_line() + geom_hline(yintercept=0)+theme_bw()+labs(title = "Hamilton's filter comparison",x= "quarter", y="")
+```
+
+```{r}
+#(e)
+#The US business cycle is more variable relative to the business cycle in UK. Before 1990 there are lagging and leading relationships between the two business cycle's peaks and troughs which indicates that it takes an amount of time for information to travel around the world, but after 1990 maybe due to the innovations of technology that the information spread much faster than before which makes the two business cycles are quite coincident nowadays, especially when big economical event occers.
+#The troughs in 1974-1975 is because of 1973 oil crisis, in 1981-1982 is because of 1980s oil glut, in 1990-1991 is because of early 1990s recession(believed to be caused by restrictive monetary policy enacted by central banks), in 2001 is because of dot-com bubble, 2008-2009 is because of financial crisis.
+```
+
+
+
