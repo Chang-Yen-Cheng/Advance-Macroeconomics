@@ -1,0 +1,50 @@
+---
+title: 'Macroeconomics'
+subtitle: 'Assignment 4'
+author: "Your name"
+date: '`r format(Sys.time(), "%d %b, %Y")`'
+output: pdf_document
+fontsize: 12pt
+classoption: a4paper
+urlcolor: blue
+---
+
+## Question 1: SVAR Modelling of Supply and Demand Disturbnces
+We replicated the results of Blanchard (1989), A Traditional Interpretation of Macroeconomic Fluctuations, AER, 79(5) during lectures in the computer lab. Specifically, we estimated the IRFs (pp1159-60) for a sample covering 1965 to 1986. 
+
+Your assignment is to run Blanchard's model for data from 1987 to 2018. 
+
+The code to download the data is in the structural VAR lecture slides 8 and 9. Calculate IRFs and FEVDs. 
+
+Are your results broadly consistent with those in Blanchard's article? Discuss the macroeconomic implications of your IRF and FEVD results.
+
+
+<!-- Answer here -->
+
+```{r}
+
+```
+
+## Question 2: 
+
+Summarise the results of Miyao (2002) and Uhlig (2005) regading the effects of monetary policy (in your own words). Write one to two pages.
+
+
+<!-- Answer here -->
+
+
+
+
+## Question 3:
+
+In the final lecture we examine Gali (1999). Run Gali's model on data for 1948-2018 and 1996-2018.Use the data we download in class. Are your results similar to Gali's original results? Comment and interpret your results.
+
+<!-- Answer here -->
+
+```{r}
+
+```
+
+
+
+
